@@ -237,7 +237,7 @@
 
         // 更新页面问候语和专属回忆
         if (currentTeacher) {
-            document.getElementById('teacherName').innerText = `亲爱的 ${currentTeacher}：`;
+            document.getElementById('teacherName').innerText = `亲爱的 ${currentTeacher} 老师：`;
             const data = teacherData[currentTeacher] || teacherData["default"];
             document.getElementById('memoryText').innerText = data.memory;
         } else {
