@@ -173,7 +173,7 @@
         <div class="footer">
             <p>学生：<strong id="studentName">你的名字</strong></p>
             <p id="majorInfo">XX大学 · XX专业 · 2026届</p>
-            <p style="margin-top: 10px; font-size: 0.8rem;">📧 保持联系: your.email@example.com</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">📧 联系邮箱: your.email@example.com</p>
         </div>
     </div>
 
@@ -214,7 +214,7 @@
         // 初始化个人信息
         document.getElementById('studentName').innerText = myInfo.name;
         document.getElementById('majorInfo').innerText = myInfo.major;
-        document.querySelector('.footer p:last-child').innerHTML = `📧 保持联系: <a href="mailto:${myInfo.email}" style="color:#2c5f2d; text-decoration:none;">${myInfo.email}</a>`;
+        document.querySelector('.footer p:last-child').innerHTML = `📧 联系邮箱: <a href="mailto:${myInfo.email}" style="color:#2c5f2d; text-decoration:none;">${myInfo.email}</a>`;
 
         // 获取 URL 参数
         const urlParams = new URLSearchParams(window.location.search);
