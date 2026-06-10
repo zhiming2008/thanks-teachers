@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>毕业致谢 - 感谢您</title>
+    <title>毕业致谢</title>
     <style>
         :root {
             --primary-color: #2c5f2d; /* 沉稳的学术绿 */
             --accent-color: #97bc62;  /* 柔和的浅绿 */
+            --highlight-bg: #2c5f2d;  /* 高亮背景色 */
+            --highlight-text: #ffffff;/* 高亮文字色 */
             --bg-color: #fdfbf7;      /* 温暖的米白色 */
             --text-color: #333333;
             --card-bg: #ffffff;
@@ -76,9 +78,50 @@
             color: #555;
         }
 
+        /* --- 新增：教师名单区域样式 --- */
+        .teachers-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px dashed #ccc;
+        }
+
+        .teachers-title {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .teachers-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .teacher-tag {
+            background-color: #e8f5e9;
+            color: var(--primary-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        /* 高亮当前访问老师的样式 */
+        .teacher-tag.highlight {
+            background-color: var(--highlight-bg);
+            color: var(--highlight-text);
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(44, 95, 45, 0.3);
+            font-weight: 700;
+        }
+        /* -------------------------------- */
+
         .footer {
-            border-top: 1px solid #e0e0e0;
-            padding-top: 1.5rem;
+            margin-top: 2.5rem;
             color: #777;
             font-size: 0.9rem;
         }
@@ -90,16 +133,15 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 针对极小屏幕的优化 */
         @media (max-width: 380px) {
             h1 { font-size: 1.5rem; }
             .greeting { font-size: 1.2rem; }
+            .teacher-tag { font-size: 0.85rem; padding: 5px 12px; }
         }
     </style>
-    <!-- 可选：添加一个优雅的字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        h1, .greeting { font-family: 'Noto Serif SC', serif; }
+        h1, .greeting, .teachers-title { font-family: 'Noto Serif SC', serif; }
     </style>
 </head>
 <body>
@@ -107,63 +149,100 @@
     <div class="container">
         <div class="icon">🎓</div>
         <h1>毕业致谢</h1>
+        <p class="subtitle">山水一程，三生有幸</p>
 
         <div class="greeting" id="teacherName">亲爱的老师：</div>
 
         <div class="message">
             <p>时光荏苒，转眼间我已毕业。在整理行囊之际，最想感谢的是您一路以来的教诲与包容。</p>
-            <p>感谢您不仅在学术上为我指点迷津，更在人生道路上给予了我最温暖的鼓励。您的严谨治学与平易近人，将是我未来前行路上最宝贵的财富。</p>
             <p>无论未来走到哪里，我都会铭记您的教导。祝您身体健康，工作顺心，桃李满天下！</p>
         </div>
 
         <div class="memory-card" id="memoryCard">
-            “<span id="memoryText">感谢您的悉心教导，这段求学时光我将永远珍藏。</span>”
+            “<span id="memoryText">人生的考试没有标准答案，感谢您指引我找到属于自己的答案。</span>”
+        </div>
+
+        <!-- 新增：教师名单区域 -->
+        <div class="teachers-section">
+            <div class="teachers-title">🌟 感谢以下每一位老师（按照学期先后顺序和档案中的科目顺序）：</div>
+            <div class="teachers-list" id="teachersList">
+                <!-- 这里的标签将由 JavaScript 动态生成 -->
+            </div>
         </div>
 
         <div class="footer">
-            <p>学生：<strong id="studentName">陈智铭</strong></p>
-            <p id="majorInfo">2026届</p>
-            <p style="margin-top: 10px; font-size: 0.8rem;">📧 邮箱: zhiming0205@outlook.com</p>
+            <p>学生：<strong id="studentName">你的名字</strong></p>
+            <p id="majorInfo">XX大学 · XX专业 · 2026届</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">📧 保持联系: your.email@example.com</p>
         </div>
     </div>
 
     <script>
-        // 1. 获取 URL 中的 teacher 参数
-        const urlParams = new URLSearchParams(window.location.search);
-        const teacher = urlParams.get('teacher');
-
-        // 2. 个性化配置字典 (你可以在这里为每位老师添加专属回忆)
-        // 键名尽量用拼音或英文，避免 URL 编码问题，或者直接用中文但确保 NFC 写入时做了 URL Encode
-        const teacherData = {
-            "王老师": {
-                memory: "永远记得您在微积分课上，为了让我们听懂，在黑板上画满的那半面墙的图解。"
-            },
-            "李老师": {
-                memory: "感谢您在我论文最迷茫的时候，逐字逐句帮我修改，连标点符号都不放过。"
-            },
-            "张老师": {
-                memory: "您在办公室请我喝的那杯茶，和那次长达一小时的职业规划谈话，让我受益匪浅。"
-            },
-            "default": {
-                memory: "感谢您的悉心教导，这段求学时光我将永远珍藏。"
-            }
+        // ==========================================
+        // 配置区域：请在这里修改你的信息
+        // ==========================================
+        
+        // 1. 你的个人信息
+        const myInfo = {
+            name: "陈智铭",
+            major: "2026届 · 13班",
+            email: "zhiming0205@outlook.com"
         };
 
-        // 3. 动态更新页面内容
-        if (teacher) {
-            document.getElementById('teacherName').innerText = `亲爱的 ${teacher}：`;
+        // 2. 所有教过你的老师名单 (请在此处添加/删除名字)
+        const allTeachers = [
+            "语文-熊霞", "数学-孙靖钧", "英语-麦敏怡", "思想政治-戴红燕", "历史-刘雅婧", "地理-秦雨涵", "物理-林瑞汉", "化学-薛岚", "生物-刘婉婵", "信息技术-尹开华", "通用技术-莫小军", "音乐-刘志军", "美术-王柴慧", "体育与健康-钟石南", "心理健康-黄燕儿", "外教-DeborahAgnesBishopWilliams", "选修课-卢瑄",
+
+            "语文-张芊玥", "英语-胡春才","物理-梁瀚", "化学-莫小静","生物-巫卓庆", "音乐-黎长学","美术-梁莹", "体育与健康-谭宇婷","心理健康-李嘉诚", "外教-JakeUnderhill",
+
+            "英语-杨晓婷", "物理-曹雪","体育与健康-吴伟先", "外教-MargaritaTatsenko","选修课-彭钰涵",
+
+            "英语-林凤彬", "化学-谢舒婷",
+
+            "数学-陈国珍", "英语-谢晓兰","物理-罗惠一","化学-罗凤良"
+        ];
+
+        // 3. 专属回忆配置 (键名必须与 allTeachers 中的名字完全一致)
+        const teacherData = {
+            "default": { memory: "人生的考试没有标准答案，感谢您指引我找到属于自己的答案。" }
+        };
+
+        // ==========================================
+        // 逻辑区域：以下代码无需修改
+        // ==========================================
+
+        // 初始化个人信息
+        document.getElementById('studentName').innerText = myInfo.name;
+        document.getElementById('majorInfo').innerText = myInfo.major;
+        document.querySelector('.footer p:last-child').innerHTML = `📧 保持联系: <a href="mailto:${myInfo.email}" style="color:#2c5f2d; text-decoration:none;">${myInfo.email}</a>`;
+
+        // 获取 URL 参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentTeacher = urlParams.get('teacher');
+
+        // 渲染教师名单并处理高亮
+        const teachersListEl = document.getElementById('teachersList');
+        allTeachers.forEach(teacher => {
+            const tag = document.createElement('span');
+            tag.className = 'teacher-tag';
+            tag.innerText = teacher;
             
-            // 尝试匹配专属回忆，如果没有匹配到则使用 default
-            const data = teacherData[teacher] || teacherData["default"];
+            // 如果 URL 中的老师名字与当前遍历的名字匹配，则添加高亮类
+            if (currentTeacher && teacher === currentTeacher) {
+                tag.classList.add('highlight');
+            }
+            
+            teachersListEl.appendChild(tag);
+        });
+
+        // 更新页面问候语和专属回忆
+        if (currentTeacher) {
+            document.getElementById('teacherName').innerText = `亲爱的 ${currentTeacher}：`;
+            const data = teacherData[currentTeacher] || teacherData["default"];
             document.getElementById('memoryText').innerText = data.memory;
         } else {
-            // 如果没有参数，显示默认状态（比如你把这个链接发到了朋友圈）
             document.getElementById('teacherName').innerText = "亲爱的老师们：";
         }
-
-        // 4. 记得修改这里为你自己的信息！
-        document.getElementById('studentName').innerText = "陈智铭"; 
-        document.getElementById('majorInfo').innerText = "2026届";
     </script>
 </body>
 </html>
