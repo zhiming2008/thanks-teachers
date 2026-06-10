@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>毕业致谢 - 感谢您</title>
+    <style>
+        :root {
+            --primary-color: #2c5f2d; /* 沉稳的学术绿 */
+            --accent-color: #97bc62;  /* 柔和的浅绿 */
+            --bg-color: #fdfbf7;      /* 温暖的米白色 */
+            --text-color: #333333;
+            --card-bg: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .icon { font-size: 3rem; margin-bottom: 10px; }
+        
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .greeting {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .message {
+            text-align: left;
+            margin-bottom: 2rem;
+            font-size: 1.05rem;
+        }
+
+        .message p { margin-bottom: 1rem; }
+
+        .memory-card {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--accent-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            text-align: left;
+            margin-bottom: 2.5rem;
+            font-style: italic;
+            color: #555;
+        }
+
+        .footer {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 1.5rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .footer strong { color: var(--primary-color); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 针对极小屏幕的优化 */
+        @media (max-width: 380px) {
+            h1 { font-size: 1.5rem; }
+            .greeting { font-size: 1.2rem; }
+        }
+    </style>
+    <!-- 可选：添加一个优雅的字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        h1, .greeting { font-family: 'Noto Serif SC', serif; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="icon">🎓</div>
+        <h1>毕业致谢</h1>
+
+        <div class="greeting" id="teacherName">亲爱的老师：</div>
+
+        <div class="message">
+            <p>时光荏苒，转眼间我已毕业。在整理行囊之际，最想感谢的是您一路以来的教诲与包容。</p>
+            <p>感谢您不仅在学术上为我指点迷津，更在人生道路上给予了我最温暖的鼓励。您的严谨治学与平易近人，将是我未来前行路上最宝贵的财富。</p>
+            <p>无论未来走到哪里，我都会铭记您的教导。祝您身体健康，工作顺心，桃李满天下！</p>
+        </div>
+
+        <div class="memory-card" id="memoryCard">
+            “<span id="memoryText">感谢您的悉心教导，这段求学时光我将永远珍藏。</span>”
+        </div>
+
+        <div class="footer">
+            <p>学生：<strong id="studentName">陈智铭</strong></p>
+            <p id="majorInfo">2026届</p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">📧 邮箱: zhiming0205@outlook.com</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. 获取 URL 中的 teacher 参数
+        const urlParams = new URLSearchParams(window.location.search);
+        const teacher = urlParams.get('teacher');
+
+        // 2. 个性化配置字典 (你可以在这里为每位老师添加专属回忆)
+        // 键名尽量用拼音或英文，避免 URL 编码问题，或者直接用中文但确保 NFC 写入时做了 URL Encode
+        const teacherData = {
+            "王老师": {
+                memory: "永远记得您在微积分课上，为了让我们听懂，在黑板上画满的那半面墙的图解。"
+            },
+            "李老师": {
+                memory: "感谢您在我论文最迷茫的时候，逐字逐句帮我修改，连标点符号都不放过。"
+            },
+            "张老师": {
+                memory: "您在办公室请我喝的那杯茶，和那次长达一小时的职业规划谈话，让我受益匪浅。"
+            },
+            "default": {
+                memory: "感谢您的悉心教导，这段求学时光我将永远珍藏。"
+            }
+        };
+
+        // 3. 动态更新页面内容
+        if (teacher) {
+            document.getElementById('teacherName').innerText = `亲爱的 ${teacher}：`;
+            
+            // 尝试匹配专属回忆，如果没有匹配到则使用 default
+            const data = teacherData[teacher] || teacherData["default"];
+            document.getElementById('memoryText').innerText = data.memory;
+        } else {
+            // 如果没有参数，显示默认状态（比如你把这个链接发到了朋友圈）
+            document.getElementById('teacherName').innerText = "亲爱的老师们：";
+        }
+
+        // 4. 记得修改这里为你自己的信息！
+        document.getElementById('studentName').innerText = "陈智铭"; 
+        document.getElementById('majorInfo').innerText = "2026届";
+    </script>
+</body>
+</html>
